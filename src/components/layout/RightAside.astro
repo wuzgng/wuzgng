@@ -19,7 +19,7 @@ const siteStats = [
 
 const recentUpdates = posts.slice(0, 3).map((post) => ({
   title: post.data.title,
-  href: `/blog/${post.id}/`,
+  href: `${import.meta.env.BASE_URL}blog/${post.id}/`,
 }));
 
 const cardClass =

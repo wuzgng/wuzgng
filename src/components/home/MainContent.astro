@@ -9,7 +9,7 @@ const featuredProjects = (
   .filter((post) => post && !post.data.draft)
   .map((post) => ({
     title: post.data.title,
-    href: `/blog/${post.id}/`,
+    href: `${import.meta.env.BASE_URL}blog/${post.id}/`,
     summary: post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。",
     tags: post.data.tags,
   }));
@@ -20,7 +20,7 @@ const latestArticles = (await getCollection("blog", ({ data }) => !data.draft))
   .map((post) => ({
     title: post.data.title,
     date: post.data.date,
-    href: `/blog/${post.id}/`,
+    href: `${import.meta.env.BASE_URL}blog/${post.id}/`,
     tags: post.data.tags,
     summary: post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。",
   }));

@@ -3,7 +3,7 @@ export const site = {
   url: "https://wuzgng.github.io",
   defaultDescription:
     "Ng的个人博客：记录技术推演、生活碎片，以及尚未被归类的思考。",
-  defaultImage: "/images/og-cover.png",
+  defaultImage: `${import.meta.env.BASE_URL}images/og-cover.png`,
   defaultImageAlt: "Ng博客默认封面图",
 } as const;
 

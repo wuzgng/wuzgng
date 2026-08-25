@@ -7,7 +7,7 @@ export const sortPostsByDateDesc = (posts: BlogPost[]) =>
 
 export const hasTag = (post: BlogPost, tag: string) => post.data.tags.includes(tag);
 
-export const getPostHref = (post: BlogPost) => `/blog/${post.id}/`;
+export const getPostHref = (post: BlogPost) => `${import.meta.env.BASE_URL}blog/${post.id}/`;
 
 export type AdjacentPosts = {
   prev: BlogPost | null;
