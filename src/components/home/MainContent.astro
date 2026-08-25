@@ -1,7 +1,7 @@
 ---
 import { getCollection, getEntry } from "astro:content";
 
-const featuredPostIds = ["ai-code-review", "distilling-myself"];  // 精选笔记
+const featuredPostIds = ["kr-trip", "bj-sunrise"];  // 精选笔记
 
 const featuredProjects = (
   await Promise.all(featuredPostIds.map((id) => getEntry("blog", id)))
