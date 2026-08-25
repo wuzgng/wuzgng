@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+
+import Hero from "../components/home/Hero.astro";
+import MainContent from "../components/home/MainContent.astro";
+import Navbar from "../components/layout/Navbar.astro";
+import RightAside from "../components/layout/RightAside.astro";
+import Sidebar from "../components/layout/Sidebar.astro";
+import SiteHead from "../components/layout/SiteHead.astro";
+import { site } from "../lib/seo";
+---
+
+<html lang="zh-CN">
+	<head>
+		<SiteHead title="Ng" description={site.defaultDescription} />
+	</head>
+	<body class="min-h-screen">
+		<Navbar />
+		<Hero />
+		<main
+			id="main-content"
+			class="site-grid site-grid--home relative z-10"
+		>
+			<div class="hidden min-w-0 min-[821px]:block min-[821px]:sticky min-[821px]:top-20">
+				<Sidebar />
+			</div>
+			<div class="min-w-0">
+				<MainContent />
+			</div>
+			<div class="hidden min-w-0 min-[821px]:col-start-2 min-[821px]:block min-[1101px]:sticky min-[1101px]:top-20 min-[1101px]:col-auto">
+				<RightAside />
+			</div>
+		</main>
+		<details class="mobile-assist min-[821px]:hidden">
+			<summary class="mobile-assist__toggle" aria-label="打开辅助信息">
+				<svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+					<path d="M5 12h14M12 5v14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
+				</svg>
+			</summary>
+			<div class="mobile-assist__panel scrollbar-thin">
+				<div class="grid gap-3">
+					<Sidebar />
+					<RightAside />
+				</div>
+			</div>
+		</details>
+	</body>
+</html>

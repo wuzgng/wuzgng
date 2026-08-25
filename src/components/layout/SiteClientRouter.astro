@@ -1,0 +1,45 @@
+---
+import { ClientRouter } from "astro:transitions";
+---
+
+<ClientRouter />
+
+<script is:inline>
+  (function () {
+    try {
+      const storedTheme = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
+        document.documentElement.classList.add("dark");
+      }
+    } catch {
+      // Ignore storage access errors.
+    }
+  })();
+</script>
+
+<script>
+  const applyTheme = () => {
+    const storedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    document.documentElement.classList.toggle(
+      "dark",
+      storedTheme === "dark" || (!storedTheme && prefersDark),
+    );
+  };
+
+  applyTheme();
+  document.addEventListener("astro:page-load", applyTheme);
+
+  document.addEventListener("click", (event) => {
+    const toggle = event.target instanceof Element ? event.target.closest("[data-theme-toggle]") : null;
+    if (!toggle) {
+      return;
+    }
+
+    const isDark = document.documentElement.classList.toggle("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+</script>

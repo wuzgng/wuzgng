@@ -1,0 +1,237 @@
+---
+import { getCollection, render } from "astro:content";
+
+import "../../styles/global.css";
+
+import BlogPostNav from "../../components/blog/BlogPostNav.astro";
+import Navbar from "../../components/layout/Navbar.astro";
+import Sidebar from "../../components/layout/Sidebar.astro";
+import SiteHead from "../../components/layout/SiteHead.astro";
+import { getAdjacentPosts } from "../../lib/blog";
+import { site } from "../../lib/seo";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      adjacent: getAdjacentPosts(post, posts),
+    },
+  }));
+}
+
+const { post, adjacent } = Astro.props;
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+
+const tagClass =
+  "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
+const tocCardClass =
+  "rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark";
+const tocTitleClass =
+  "mb-3 text-xs font-bold uppercase leading-none tracking-[0.12em] text-text-muted dark:text-text-muted-dark";
+---
+
+<html lang="zh-CN">
+  <head>
+    <SiteHead
+      title={post.data.title}
+      description={post.data.description ?? site.defaultDescription}
+      type="article"
+      publishedTime={post.data.date.toISOString()}
+    />
+  </head>
+  <body class="min-h-screen">
+    <Navbar />
+    <main
+      class="site-grid site-grid--page relative z-10 text-text-primary dark:text-text-primary-dark"
+    >
+      <div class="hidden min-w-0 min-[821px]:block min-[821px]:sticky min-[821px]:top-20">
+        <Sidebar />
+      </div>
+      <div class="min-w-0">
+        <article class="rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark sm:p-8">
+          <header class="border-b border-border pb-6 dark:border-border-dark">
+            <a
+              class="text-sm font-semibold text-text-secondary no-underline transition-colors duration-200 hover:text-accent dark:text-text-secondary-dark"
+              href="/"
+            >
+              返回首页
+            </a>
+            <h1 class="mt-5 text-3xl font-bold leading-tight tracking-[-0.06em] sm:text-5xl">{post.data.title}</h1>
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <time class="text-sm text-text-muted dark:text-text-muted-dark" datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+              {post.data.tags.map((tag) => <span class={tagClass}>#{tag}</span>)}
+            </div>
+            {
+              post.data.description && (
+                <p class="mt-5 text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
+                  {post.data.description}
+                </p>
+              )
+            }
+          </header>
+
+          <div class="article-content mt-8">
+            <Content />
+          </div>
+          <BlogPostNav adjacent={adjacent} />
+        </article>
+      </div>
+      <div class="hidden min-w-0 min-[821px]:col-start-2 min-[821px]:block min-[1101px]:sticky min-[1101px]:top-20 min-[1101px]:col-auto">
+        <aside class="grid w-full content-start gap-4 text-text-primary dark:text-text-primary-dark" aria-label="文章辅助信息">
+          <section class={tocCardClass} aria-labelledby="article-toc-title">
+            <h2 id="article-toc-title" class={tocTitleClass}>文章目录</h2>
+            {
+              tocHeadings.length > 0 ? (
+                <nav aria-label="文章目录">
+                  <ol class="m-0 grid list-none gap-2 p-0">
+                    {tocHeadings.map((heading) => (
+                      <li class={heading.depth === 3 ? "pl-3" : ""}>
+                        <a
+                          class="block rounded-card px-2 py-1.5 text-sm leading-5 text-text-secondary no-underline transition duration-200 hover:bg-primary/10 hover:text-text-primary dark:text-text-secondary-dark dark:hover:bg-white/8 dark:hover:text-text-primary-dark"
+                          href={`#${heading.slug}`}
+                        >
+                          {heading.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </nav>
+              ) : (
+                <p class="m-0 text-sm leading-6 text-text-secondary dark:text-text-secondary-dark">
+                  这篇文章暂无可跳转的小标题。
+                </p>
+              )
+            }
+          </section>
+        </aside>
+      </div>
+    </main>
+    <details class="mobile-assist min-[821px]:hidden">
+      <summary class="mobile-assist__toggle" aria-label="打开辅助信息">
+        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12h14M12 5v14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
+        </svg>
+      </summary>
+      <div class="mobile-assist__panel scrollbar-thin">
+        <div class="grid gap-3">
+          <Sidebar />
+          <aside class="grid w-full content-start gap-4 text-text-primary dark:text-text-primary-dark" aria-label="文章辅助信息">
+            <section class={tocCardClass} aria-labelledby="mobile-article-toc-title">
+              <h2 id="mobile-article-toc-title" class={tocTitleClass}>文章目录</h2>
+              {
+                tocHeadings.length > 0 ? (
+                  <nav aria-label="文章目录">
+                    <ol class="m-0 grid list-none gap-2 p-0">
+                      {tocHeadings.map((heading) => (
+                        <li class={heading.depth === 3 ? "pl-3" : ""}>
+                          <a
+                            class="block rounded-card px-2 py-2 text-sm leading-5 text-text-secondary no-underline transition duration-200 hover:bg-primary/10 hover:text-text-primary dark:text-text-secondary-dark dark:hover:bg-white/8 dark:hover:text-text-primary-dark"
+                            href={`#${heading.slug}`}
+                          >
+                            {heading.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  </nav>
+                ) : (
+                  <p class="m-0 text-sm leading-6 text-text-secondary dark:text-text-secondary-dark">
+                    这篇文章暂无可跳转的小标题。
+                  </p>
+                )
+              }
+            </section>
+          </aside>
+        </div>
+      </div>
+    </details>
+  </body>
+</html>
+
+<style>
+  .article-content {
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    line-height: 1.9;
+  }
+
+  :global(.dark) .article-content {
+    color: var(--color-text-primary-dark);
+  }
+
+  .article-content :global(:where(h2, h3, h4)) {
+    margin: 2rem 0 0.75rem;
+    line-height: 1.35;
+    letter-spacing: -0.04em;
+    scroll-margin-top: 6rem;
+  }
+
+  .article-content :global(h2) {
+    font-size: 1.5rem;
+  }
+
+  .article-content :global(h3) {
+    font-size: 1.25rem;
+  }
+
+  .article-content :global(:where(p, ul, ol, blockquote)) {
+    margin: 1rem 0;
+  }
+
+  .article-content :global(:where(ul, ol)) {
+    padding-left: 1.25rem;
+  }
+
+  .article-content :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1rem;
+    color: var(--color-text-secondary);
+  }
+
+  :global(.dark) .article-content :global(blockquote) {
+    color: var(--color-text-secondary-dark);
+  }
+
+  .article-content :global(a) {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .article-content :global(a:hover) {
+    text-decoration: underline;
+  }
+
+  .article-content :global(code) {
+    border-radius: 0.35rem;
+    background: rgb(142 164 200 / 0.12);
+    padding: 0.12rem 0.28rem;
+    font-size: 0.92em;
+  }
+
+  .article-content :global(pre) {
+    overflow-x: auto;
+    border-radius: var(--radius-card);
+    background: rgb(15 23 42 / 0.92);
+    padding: 1rem;
+    color: rgb(248 250 252);
+  }
+
+  .article-content :global(pre code) {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+</style>

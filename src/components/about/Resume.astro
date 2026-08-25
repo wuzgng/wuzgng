@@ -1,0 +1,406 @@
+<div class="resume">
+  <main class="resume-page">
+    <header>
+      <h1>吴炯林</h1>
+      <div class="resume-contact">
+        <div>GitHub: https://github.com/wuzgng</div>
+        <div>Email: wuzhguang@163.com</div>
+        <div>Tel: (+86)190*****850</div>
+      </div>
+      <div class="resume-summary">
+        信息与通信工程硕士，研究方向为深度学习、多模态信号处理与 Transformer 序列建模。具备扎实的算法工程能力和项目落地经验，熟悉大模型提示词工程与实际业务场景应用。
+      </div>
+    </header>
+
+    <div class="resume-layout">
+      <section>
+        <h2>教育经历</h2>
+        <h3>北京航空航天大学</h3>
+        <div class="resume-meta">信息与通信工程 | 学术型硕士</div>
+        <div class="resume-meta">2022.09 – 2025.06</div>
+        <ul class="resume-compact-list">
+          <li>GPA 3.83 / 4.0</li>
+          <li>研究方向：深度学习 · 多模态信号处理 · Transformer 序列建模</li>
+        </ul>
+
+        <h3 style="margin-top: 14px;">武汉理工大学</h3>
+        <div class="resume-meta">通信工程 | 本科</div>
+        <div class="resume-meta">2018.09 – 2022.06</div>
+        <ul class="resume-compact-list">
+          <li>GPA 3.86 / 4.0 | CET-6 510 · CET-4 529</li>
+          <li>主修：信号与系统 · 电磁场与电磁波 · 数字信号处理 · 数字电路 · 信息理论与编码</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>项目经历</h2>
+
+        <article class="resume-project">
+          <div class="resume-project-head">
+            <div>
+              <h3>基于 Transformer 的序列到序列信号重建模型</h3>
+            </div>
+            <div class="resume-project-time">2024.04 – 2024.08</div>
+          </div>
+          <ul>
+            <li>设计并实现卷积–多头自注意力融合的 Transformer 编码器-解码器序列模型，端到端完成信号重建任务，实现源序列到目标序列的时域解耦映射。</li>
+            <li>引入一维卷积 + GLU 门控单元增强局部时序特征建模，缓解纯自注意力机制的局部感知不足，提升序列建模的细粒度表达能力。</li>
+            <li>设计编码器-解码器层数消融实验，系统评估模型容量、重建精度与推理延迟之间的权衡关系。</li>
+            <li>重建质量 PSLR 稳定在 27.7–28 dB，验证了模型在低 SNR、高干扰条件下的鲁棒序列映射能力。</li>
+          </ul>
+          <div class="resume-tags" style="margin-top: 4px;">技术栈：PyTorch · Transformer (Encoder-Decoder) · Multi-head Self-Attention · GLU · 1D CNN</div>
+        </article>
+
+        <article class="resume-project">
+          <div class="resume-project-head">
+            <div>
+              <h3>多模态特征融合与注意力机制信号识别模型</h3>
+            </div>
+            <div class="resume-project-time">2023.10 – 2024.02</div>
+          </div>
+          <ul>
+            <li>构建双流并行卷积架构（1D 幅度-相位序列 + 2D 时频图），分别引入通道注意力与空间注意力机制，实现跨维度特征交互与自适应融合。</li>
+            <li>基于 STFT 构建时频图数据集，通过 CNN + 全局平均池化实现时频域识别模型，检测准确率 96.8%，验证多表征协同的有效性。</li>
+            <li>1D 序列分支在低 SNR 条件下检测准确率 97.2%，双模态融合后准确率进一步提升。</li>
+            <li>设计三种决策级融合策略（最大置信度投票、加权投票、规则投票），实现多模型协同推理与不确定性整合。</li>
+          </ul>
+          <div class="resume-tags" style="margin-top: 4px;">论文：A Hybrid 1D-2D CNN with Decision-Level Fusion for Radar Active Deception Jamming Recognition, ISEAE 2025</div>
+          <div class="resume-tags" style="margin-top: 2px;">技术栈：PyTorch · CNN · Channel/Spatial Attention · STFT 时频分析 · 决策级融合 · 多模态学习</div>
+        </article>
+      </section>
+
+      <section>
+        <h2>工作经历</h2>
+
+        <article class="resume-project">
+          <div class="resume-project-head">
+            <div>
+              <h3>南网数字运营软件科技（广东）有限公司</h3>
+            </div>
+            <div class="resume-project-time">2025.07 – 至今</div>
+          </div>
+          <div style="margin-bottom: 8px;">
+            <div class="resume-tag-title">基于大模型的图像自动判定与结构化信息提取</div>
+            <ul>
+              <li>构建基于大模型提示词工程的图像自动判定流水线，实现端到端图像语义理解、结构化分类与可解释判定输出。</li>
+              <li>设计统一 JSON 输出 Schema，固化提示词版本与推理超参数，确保判定结果可回归、可复现。</li>
+              <li>基于 Python 构建自动化批量测试与验证流水线，实现 ~100 张/2 分钟的高吞吐处理效率。</li>
+            </ul>
+            <div class="resume-tags" style="margin-top: 4px;">技术栈：Python · LLM/VLM 提示词工程 · JSON Schema · 批量自动化测试</div>
+          </div>
+          <div>
+            <div class="resume-tag-title">电网管理平台实时数据展示消缺</div>
+            <ul>
+              <li>完成前端实时数据展示与后端数据库字段映射联调，保障实时数据稳定可视化。</li>
+            </ul>
+            <div class="resume-tags" style="margin-top: 4px;">技术栈：Java · JavaScript · 前端-后端联调 · 实时数据可视化</div>
+          </div>
+        </article>
+      </section>
+
+      <section>
+        <h2>获奖与荣誉</h2>
+        <ul>
+          <li>APMCM 亚太地区大学生数学建模竞赛 — 量子计算赛道 二等奖（数据分析 · 模型构建 · 算法优化）</li>
+          <li>全国大学生数学竞赛 二等奖、湖北省大学生数学竞赛 二等奖</li>
+          <li>北京航空航天大学学业奖学金</li>
+          <li>武汉理工大学优秀毕业生、校三好学生</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>个人技能</h2>
+        <div class="resume-skills-list">
+          <div class="resume-skill-item"><span class="resume-skill-label">编程语言</span>Python, Java, JavaScript</div>
+          <div class="resume-skill-item"><span class="resume-skill-label">深度学习</span>PyTorch, Transformer, Multi-head Self-Attention, CNN, GLU, Channel/Spatial Attention</div>
+          <div class="resume-skill-item"><span class="resume-skill-label">信号处理</span>STFT 时频分析, 分数阶傅里叶变换, 多模态信号处理, 特征提取</div>
+          <div class="resume-skill-item"><span class="resume-skill-label">大模型与工具</span>LLM/VLM 提示词工程, JSON Schema, 批量自动化测试, Docker</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<style>
+  .resume {
+    --resume-ink: #18202f;
+    --resume-muted: #536071;
+    --resume-subtle: #7a8494;
+    --resume-line: rgb(66 84 115 / 0.16);
+    --resume-soft: #f7f9fc;
+    --resume-accent: #3f6fae;
+    --resume-accent-soft: rgb(63 111 174 / 0.1);
+    --resume-accent-line: rgb(63 111 174 / 0.28);
+
+    margin-top: 1.25rem;
+    overflow-x: auto;
+    color: var(--resume-ink);
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .resume-page {
+    width: min(52rem, 100%);
+    min-width: 0;
+    margin: 0 auto;
+    padding: clamp(1.25rem, 4vw, 2.4rem);
+    background: #ffffff;
+    border: 1px solid var(--resume-line);
+    border-radius: 1rem;
+    box-shadow: 0 1.25rem 3.25rem rgb(15 23 42 / 0.08);
+  }
+
+  .resume header {
+    position: relative;
+    display: grid;
+    gap: 0.8rem;
+    border-bottom: 1px solid var(--resume-line);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.4rem;
+    padding-left: 1rem;
+  }
+
+  .resume header::before {
+    position: absolute;
+    top: 0.15rem;
+    bottom: 1.25rem;
+    left: 0;
+    width: 0.25rem;
+    border-radius: 999px;
+    background: var(--resume-accent);
+    content: "";
+  }
+
+  .resume h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 5vw, 2.55rem);
+    line-height: 1;
+    letter-spacing: 0.08em;
+    color: var(--resume-ink);
+  }
+
+  .resume-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-top: 0;
+    color: var(--resume-muted);
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  .resume-contact > div {
+    border: 1px solid var(--resume-line);
+    border-radius: 999px;
+    background: var(--resume-soft);
+    padding: 0.35rem 0.65rem;
+    word-break: break-word;
+  }
+
+  .resume-summary {
+    margin-top: 0;
+    border-left: 3px solid var(--resume-accent-line);
+    border-radius: 0.7rem;
+    background: var(--resume-accent-soft);
+    padding: 0.75rem 0.9rem;
+    color: var(--resume-ink);
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+
+  .resume-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .resume section {
+    margin-bottom: 0;
+    padding-top: 0.15rem;
+  }
+
+  .resume h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0 0.75rem;
+    color: var(--resume-ink);
+    font-size: 1rem;
+    line-height: 1.25;
+    letter-spacing: 0.06em;
+  }
+
+  .resume h2::after {
+    flex: 1;
+    height: 1px;
+    background: var(--resume-line);
+    content: "";
+  }
+
+  .resume h3 {
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.45;
+    color: var(--resume-ink);
+  }
+
+  .resume-meta {
+    margin-top: 0.1rem;
+    color: var(--resume-subtle);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .resume-tags {
+    color: var(--resume-muted);
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+
+  .resume-skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .resume-skill-item {
+    font-size: 0.89rem;
+    line-height: 1.65;
+    color: var(--resume-muted);
+  }
+
+  .resume-skill-label {
+    display: inline-block;
+    min-width: 5.6rem;
+    margin-right: 0.35rem;
+    color: var(--resume-ink);
+    font-weight: 600;
+  }
+
+  .resume-skill-label::after {
+    content: "：";
+    font-weight: 400;
+  }
+
+  .resume ul {
+    margin: 0.45rem 0 0;
+    padding-left: 1.05rem;
+  }
+
+  .resume li {
+    margin-bottom: 0.28rem;
+    padding-left: 0.1rem;
+  }
+
+  .resume li::marker {
+    color: var(--resume-accent);
+  }
+
+  .resume-project {
+    position: relative;
+    margin-bottom: 1rem;
+    border-left: 1px solid var(--resume-accent-line);
+    padding-left: 1rem;
+  }
+
+  .resume-project-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .resume-project-head::before {
+    position: absolute;
+    top: 0.25rem;
+    left: -0.34rem;
+    width: 0.62rem;
+    height: 0.62rem;
+    border: 2px solid #ffffff;
+    border-radius: 999px;
+    background: var(--resume-accent);
+    box-shadow: 0 0 0 1px var(--resume-accent-line);
+    content: "";
+  }
+
+  .resume-project-time {
+    flex: 0 0 auto;
+    color: var(--resume-subtle);
+    font-size: 0.8rem;
+    line-height: 1.45;
+    padding-top: 0.08rem;
+    white-space: nowrap;
+  }
+
+  .resume-link {
+    color: var(--resume-muted);
+    font-size: 0.82rem;
+    word-break: break-all;
+  }
+
+  .resume-link div {
+    margin-top: 0.1rem;
+  }
+
+  .resume-compact-list li {
+    margin-bottom: 0.18rem;
+  }
+
+  @media (max-width: 720px) {
+    .resume {
+      margin-inline: -0.25rem;
+      font-size: 13.5px;
+    }
+
+    .resume-page {
+      padding: 1.15rem 0.95rem;
+      border-radius: 0.85rem;
+      box-shadow: 0 1rem 2rem rgb(15 23 42 / 0.07);
+    }
+
+    .resume header {
+      padding-left: 0.85rem;
+    }
+
+    .resume-contact > div {
+      width: 100%;
+      border-radius: 0.65rem;
+    }
+
+    .resume-project-head {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .resume-project-time {
+      white-space: normal;
+    }
+  }
+
+  @media print {
+    .resume {
+      overflow: visible;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .resume-page {
+      width: auto;
+      border: none;
+      border-radius: 0;
+      padding: 13mm;
+      box-shadow: none;
+    }
+
+    .resume-contact > div,
+    .resume-summary {
+      background: transparent;
+    }
+
+    .resume-project-head::before {
+      border-color: #ffffff;
+    }
+  }
+</style>

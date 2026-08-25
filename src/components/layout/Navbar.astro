@@ -1,0 +1,264 @@
+---
+import { getCollection } from "astro:content";
+
+import siteIcon from "../../assets/site-icon.png";
+import { sortPostsByDateDesc } from "../../lib/blog";
+
+const navItems = [
+  { label: "首页", href: "/" },
+  { label: "技术", href: "/blog/tech/" },
+  { label: "项目", href: "/blog/moments/" },
+  { label: "生活", href: "/blog/life/" },
+  { label: "关于", href: "/about/" },
+];
+
+const searchPosts = sortPostsByDateDesc(await getCollection("blog", ({ data }) => !data.draft)).map((post) => ({
+  title: post.data.title,
+  description: post.data.description ?? "",
+  tags: post.data.tags,
+  href: `/blog/${post.id}/`,
+}));
+
+const actionClass =
+  "relative flex h-10 w-10 touch-manipulation items-center justify-center rounded-card text-white/70 transition duration-200 hover:-translate-y-px hover:bg-white/10 hover:text-white";
+---
+
+<header class="fixed inset-x-0 top-0 z-50 px-2 py-3 text-white sm:px-4 sm:py-4" data-navbar>
+  <nav
+    class="mx-auto grid min-h-14 w-full max-w-6xl grid-cols-[1fr_auto] items-center gap-2 rounded-[1.25rem] border border-white/12 bg-slate-950/28 p-2 shadow-[0_18px_48px_rgb(0_0_0_/_0.18)] backdrop-blur-2xl sm:gap-4 md:grid-cols-[1fr_auto_1fr]"
+    aria-label="Primary navigation"
+  >
+    <a class="flex items-center gap-2 pl-1 no-underline" href="/" aria-label="Ng首页">
+      <img class="h-8 w-8 rounded-full object-cover" src={siteIcon.src} alt="" width="32" height="32" />
+      <span class="text-base font-semibold tracking-[-0.03em]">Ng</span>
+    </a>
+
+    <div class="hidden items-center gap-1 md:flex" aria-label="Main links">
+      {
+        navItems.map((item) => (
+          <a
+            class="relative rounded-card px-3 py-2 text-sm font-medium text-white/74 no-underline transition duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-px after:scale-x-75 after:bg-current after:opacity-0 after:transition after:duration-200 hover:-translate-y-px hover:bg-white/9 hover:text-white hover:after:scale-x-100 hover:after:opacity-32"
+            href={item.href}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="flex justify-end gap-1">
+      <div class="relative" data-search-root>
+        <button class={actionClass} type="button" aria-label="搜索" data-search-toggle>
+          <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+            />
+          </svg>
+        </button>
+
+        <div
+          class="pointer-events-none fixed left-2 right-2 top-20 hidden w-auto origin-top-right translate-y-1 opacity-0 transition duration-200 data-[open=true]:pointer-events-auto data-[open=true]:grid data-[open=true]:translate-y-0 data-[open=true]:opacity-100 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%_+_0.75rem)] sm:w-[min(22rem,calc(100vw_-_2rem))]"
+          data-search-panel
+        >
+          <div class="overflow-hidden rounded-[1.15rem] border border-white/45 bg-white/88 text-slate-950 shadow-[0_18px_48px_rgb(15_23_42_/_0.22)] backdrop-blur-2xl dark:border-white/12 dark:bg-slate-950/88 dark:text-white">
+            <label class="sr-only" for="site-search-input">搜索文章</label>
+            <div class="flex items-center gap-2 border-b border-slate-950/8 bg-white/42 px-3 py-2 dark:border-white/10 dark:bg-white/6">
+              <svg class="h-4 w-4 shrink-0 text-slate-500 dark:text-white/55" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.8"
+                />
+              </svg>
+              <input
+                id="site-search-input"
+                class="h-10 min-w-0 flex-1 border-0 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500 dark:text-white dark:placeholder:text-white/45"
+                type="search"
+                placeholder="搜索标题、摘要或标签..."
+                autocomplete="off"
+                data-search-input
+              />
+            </div>
+            <div class="grid max-h-[min(24rem,calc(100vh_-_8rem))] gap-1 overflow-y-auto p-2 scrollbar-thin" data-search-results>
+              <p class="m-0 px-3 py-3 text-sm text-slate-500 dark:text-white/58">输入关键词开始搜索。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class={actionClass} type="button" aria-label="切换暗黑模式" data-theme-toggle>
+        <svg class="h-4 w-4 dark:hidden" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m0-11.32L4.93 4.93m14.14 14.14-1.41-1.41M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.7"
+          />
+        </svg>
+        <svg class="hidden h-4 w-4 dark:block" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M20.3 14.4A7.8 7.8 0 0 1 9.6 3.7 8.8 8.8 0 1 0 20.3 14.4Z"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.7"
+          />
+        </svg>
+      </button>
+
+      <a class={actionClass} href="https://github.com/wuzgng" target="_blank" rel="noreferrer" aria-label="GitHub">
+        <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 2C6.48 2 2 6.58 2 12.24c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.5v-1.9c-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.85.09-.66.35-1.12.64-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.92c.85 0 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.06.36.32.68.95.68 1.92v2.8c0 .28.18.6.69.5A10.17 10.17 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"
+            fill="currentColor"
+          />
+        </svg>
+      </a>
+
+      <button
+        class={`${actionClass} md:hidden`}
+        type="button"
+        aria-label="打开导航菜单"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        data-mobile-menu-toggle
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M4 7h16M4 12h16M4 17h16"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1.8"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div
+      id="mobile-menu"
+      class="col-span-2 hidden origin-top translate-y-1 opacity-0 transition duration-200 data-[open=true]:grid data-[open=true]:translate-y-0 data-[open=true]:opacity-100 md:hidden"
+      data-mobile-menu
+    >
+      <div class="grid gap-1 border-t border-white/10 pt-2">
+        {
+          navItems.map((item) => (
+            <a
+              class="rounded-card px-3 py-3 text-sm font-semibold text-white/78 no-underline transition duration-200 hover:bg-white/10 hover:text-white"
+              href={item.href}
+              data-mobile-menu-link
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script define:vars={{ searchPosts }}>
+  const searchToggle = document.querySelector("[data-search-toggle]");
+  const searchRoot = document.querySelector("[data-search-root]");
+  const searchPanel = document.querySelector("[data-search-panel]");
+  const searchInput = document.querySelector("[data-search-input]");
+  const searchResults = document.querySelector("[data-search-results]");
+  const navbar = document.querySelector("[data-navbar]");
+  const mobileMenuToggle = document.querySelector("[data-mobile-menu-toggle]");
+  const mobileMenu = document.querySelector("[data-mobile-menu]");
+  const mobileMenuLinks = document.querySelectorAll("[data-mobile-menu-link]");
+
+  const setMobileMenuOpen = (isOpen) => {
+    mobileMenu?.setAttribute("data-open", String(isOpen));
+    mobileMenuToggle?.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  const escapeHtml = (value) =>
+    value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
+
+  const renderSearchResults = (query) => {
+    if (!searchResults) return;
+
+    const keyword = query.trim().toLowerCase();
+
+    if (!keyword) {
+      searchResults.innerHTML = '<p class="m-0 px-3 py-3 text-sm text-slate-500 dark:text-white/58">输入关键词开始搜索。</p>';
+      return;
+    }
+
+    const results = searchPosts
+      .filter((post) => {
+        const haystack = [post.title, post.description, ...post.tags].join(" ").toLowerCase();
+        return haystack.includes(keyword);
+      })
+      .slice(0, 8);
+
+    if (results.length === 0) {
+      searchResults.innerHTML = '<p class="m-0 px-3 py-3 text-sm text-slate-500 dark:text-white/58">没有找到相关文章。</p>';
+      return;
+    }
+
+    searchResults.innerHTML = results
+      .map(
+        (post) => `
+          <a class="grid gap-1 rounded-card px-3 py-2 text-slate-800 no-underline transition duration-200 hover:bg-slate-950/6 hover:text-slate-950 dark:text-white/82 dark:hover:bg-white/10 dark:hover:text-white" href="${post.href}">
+            <span class="text-sm font-semibold leading-6">${escapeHtml(post.title)}</span>
+            <span class="line-clamp-2 text-xs leading-5 text-slate-500 dark:text-white/55">${escapeHtml(post.description || post.tags.map((tag) => `#${tag}`).join(" "))}</span>
+          </a>
+        `,
+      )
+      .join("");
+  };
+
+  searchToggle?.addEventListener("click", () => {
+    const isOpen = searchPanel?.getAttribute("data-open") === "true";
+    searchPanel?.setAttribute("data-open", String(!isOpen));
+    setMobileMenuOpen(false);
+
+    if (!isOpen) {
+      requestAnimationFrame(() => searchInput?.focus());
+    }
+  });
+
+  mobileMenuToggle?.addEventListener("click", () => {
+    const isOpen = mobileMenu?.getAttribute("data-open") === "true";
+    setMobileMenuOpen(!isOpen);
+    searchPanel?.setAttribute("data-open", "false");
+  });
+
+  mobileMenuLinks.forEach((link) => {
+    link.addEventListener("click", () => setMobileMenuOpen(false));
+  });
+
+  searchInput?.addEventListener("input", (event) => {
+    renderSearchResults(event.currentTarget.value);
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!searchRoot?.contains(event.target)) {
+      searchPanel?.setAttribute("data-open", "false");
+    }
+
+    if (!navbar?.contains(event.target)) {
+      setMobileMenuOpen(false);
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      searchPanel?.setAttribute("data-open", "false");
+      setMobileMenuOpen(false);
+    }
+  });
+</script>
