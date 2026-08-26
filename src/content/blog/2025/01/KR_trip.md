@@ -10,10 +10,10 @@ draft: false
 
 2025 新年
 
-![1](/wuzgng/images/blog/2024/01/kr-trip/20250101-1.jpeg)
+![1](/wuzgng/images/blog/2025/01/kr-trip/20250101-1.jpeg)
 
-![2](/wuzgng/images/blog/2024/01/kr-trip/20250101-2.jpeg)
+![2](/wuzgng/images/blog/2025/01/kr-trip/20250101-2.jpeg)
 
-![3](/wuzgng/images/blog/2024/01/kr-trip/20250101-3.jpeg)
+![3](/wuzgng/images/blog/2025/01/kr-trip/20250101-3.jpeg)
 
-![4](/wuzgng/images/blog/2024/01/kr-trip/20240101-4.jpeg)
+![4](/wuzgng/images/blog/2025/01/kr-trip/20240101-4.jpeg)
