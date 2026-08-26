@@ -74,8 +74,8 @@ import mobileHeroImage from "../../assets/mobile-background.jpg";
 
   .typewriter-text {
     display: inline-block;
-    width: 0;
-    max-width: max-content;
+    width: max-content;
+    max-width: 0;
     overflow: hidden;
     border-right: 0.06em solid currentColor;
     white-space: nowrap;
@@ -112,11 +112,11 @@ import mobileHeroImage from "../../assets/mobile-background.jpg";
 
   @keyframes typewriter {
     from {
-      width: 0;
+      max-width: 0;
     }
 
     to {
-      width: 9em;
+      max-width: 16em;
     }
   }
 
@@ -174,7 +174,8 @@ import mobileHeroImage from "../../assets/mobile-background.jpg";
 
   @media (prefers-reduced-motion: reduce) {
     .typewriter-text {
-      width: auto;
+      width: max-content;
+      max-width: none;
       border-right: 0;
       animation: none;
     }

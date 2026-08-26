@@ -169,25 +169,20 @@ const actionClass =
 </header>
 
 <script define:vars={{ searchPosts }}>
-  const searchToggle = document.querySelector("[data-search-toggle]");
-  const searchRoot = document.querySelector("[data-search-root]");
-  const searchPanel = document.querySelector("[data-search-panel]");
-  const searchInput = document.querySelector("[data-search-input]");
-  const searchResults = document.querySelector("[data-search-results]");
-  const navbar = document.querySelector("[data-navbar]");
-  const mobileMenuToggle = document.querySelector("[data-mobile-menu-toggle]");
-  const mobileMenu = document.querySelector("[data-mobile-menu]");
-  const mobileMenuLinks = document.querySelectorAll("[data-mobile-menu-link]");
-
   const setMobileMenuOpen = (isOpen) => {
-    mobileMenu?.setAttribute("data-open", String(isOpen));
-    mobileMenuToggle?.setAttribute("aria-expanded", String(isOpen));
+    document.querySelector("[data-mobile-menu]")?.setAttribute("data-open", String(isOpen));
+    document.querySelector("[data-mobile-menu-toggle]")?.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  const setSearchPanelOpen = (isOpen) => {
+    document.querySelector("[data-search-panel]")?.setAttribute("data-open", String(isOpen));
   };
 
   const escapeHtml = (value) =>
     value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 
   const renderSearchResults = (query) => {
+    const searchResults = document.querySelector("[data-search-results]");
     if (!searchResults) return;
 
     const keyword = query.trim().toLowerCase();
@@ -221,43 +216,49 @@ const actionClass =
       .join("");
   };
 
-  searchToggle?.addEventListener("click", () => {
-    const isOpen = searchPanel?.getAttribute("data-open") === "true";
-    searchPanel?.setAttribute("data-open", String(!isOpen));
-    setMobileMenuOpen(false);
+  document.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("[data-search-toggle]")) {
+      const isOpen = document.querySelector("[data-search-panel]")?.getAttribute("data-open") === "true";
+      setSearchPanelOpen(!isOpen);
+      setMobileMenuOpen(false);
 
-    if (!isOpen) {
-      requestAnimationFrame(() => searchInput?.focus());
+      if (!isOpen) {
+        requestAnimationFrame(() => document.querySelector("[data-search-input]")?.focus());
+      }
+      return;
+    }
+
+    if (event.target instanceof Element && event.target.closest("[data-mobile-menu-toggle]")) {
+      const isOpen = document.querySelector("[data-mobile-menu]")?.getAttribute("data-open") === "true";
+      setMobileMenuOpen(!isOpen);
+      setSearchPanelOpen(false);
+      return;
+    }
+
+    if (event.target instanceof Element && event.target.closest("[data-mobile-menu-link]")) {
+      setMobileMenuOpen(false);
     }
   });
 
-  mobileMenuToggle?.addEventListener("click", () => {
-    const isOpen = mobileMenu?.getAttribute("data-open") === "true";
-    setMobileMenuOpen(!isOpen);
-    searchPanel?.setAttribute("data-open", "false");
-  });
-
-  mobileMenuLinks.forEach((link) => {
-    link.addEventListener("click", () => setMobileMenuOpen(false));
-  });
-
-  searchInput?.addEventListener("input", (event) => {
-    renderSearchResults(event.currentTarget.value);
+  document.addEventListener("input", (event) => {
+    if (event.target instanceof Element && event.target.closest("[data-search-input]")) {
+      renderSearchResults(event.target.value);
+    }
   });
 
   document.addEventListener("pointerdown", (event) => {
-    if (!searchRoot?.contains(event.target)) {
-      searchPanel?.setAttribute("data-open", "false");
+    if (!document.querySelector("[data-search-root]")?.contains(event.target)) {
+      setSearchPanelOpen(false);
     }
 
-    if (!navbar?.contains(event.target)) {
+    if (!document.querySelector("[data-navbar]")?.contains(event.target)) {
       setMobileMenuOpen(false);
     }
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      searchPanel?.setAttribute("data-open", "false");
+      setSearchPanelOpen(false);
       setMobileMenuOpen(false);
     }
   });
