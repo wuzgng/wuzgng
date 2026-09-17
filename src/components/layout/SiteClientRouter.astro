@@ -34,7 +34,19 @@ import { ClientRouter } from "astro:transitions";
   document.addEventListener("astro:page-load", applyTheme);
 
   document.addEventListener("click", (event) => {
-    const toggle = event.target instanceof Element ? event.target.closest("[data-theme-toggle]") : null;
+    if (!(event.target instanceof Element)) {
+      return;
+    }
+
+    const setter = event.target.closest("[data-theme-set]");
+    if (setter) {
+      const theme = setter.getAttribute("data-theme-set");
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("theme", theme === "dark" ? "dark" : "light");
+      return;
+    }
+
+    const toggle = event.target.closest("[data-theme-toggle]");
     if (!toggle) {
       return;
     }

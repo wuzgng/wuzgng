@@ -2,12 +2,12 @@
 import { getCollection, render } from "astro:content";
 
 import "../../styles/global.css";
+import "katex/dist/katex.min.css";
 
-import BlogPostNav from "../../components/blog/BlogPostNav.astro";
-import Navbar from "../../components/layout/Navbar.astro";
-import Sidebar from "../../components/layout/Sidebar.astro";
+import BackHome from "../../components/layout/BackHome.astro";
+import TableOfContents from "../../components/layout/TableOfContents.astro";
 import SiteHead from "../../components/layout/SiteHead.astro";
-import { getAdjacentPosts } from "../../lib/blog";
+import ThemeToggle from "../../components/layout/ThemeToggle.astro";
 import { site } from "../../lib/seo";
 
 export async function getStaticPaths() {
@@ -17,23 +17,15 @@ export async function getStaticPaths() {
     params: { slug: post.id },
     props: {
       post,
-      adjacent: getAdjacentPosts(post, posts),
     },
   }));
 }
 
-const { post, adjacent } = Astro.props;
-const { Content } = await render(post);
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const hasToc = tocItems.length > 0;
 
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
-
-const topicClass =
-  "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
 ---
 
 <html lang="zh-CN">
@@ -46,65 +38,88 @@ const topicClass =
     />
   </head>
   <body class="min-h-screen">
-    <Navbar />
-    <main
-      class="site-grid site-grid--page relative z-10 text-text-primary dark:text-text-primary-dark"
-    >
-      <div class="hidden min-w-0 min-[821px]:block min-[821px]:sticky min-[821px]:top-20">
-        <Sidebar />
-      </div>
-      <div class="min-w-0">
-        <article class="rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark sm:p-8">
-          <header class="border-b border-border pb-6 dark:border-border-dark">
-            <a
-              class="text-sm font-semibold text-text-secondary no-underline transition-colors duration-200 hover:text-accent dark:text-text-secondary-dark"
-              href={import.meta.env.BASE_URL}
-            >
-              返回首页
-            </a>
-            <h1 class="mt-5 text-3xl font-bold leading-tight tracking-[-0.06em] sm:text-5xl">{post.data.title}</h1>
-            <div class="mt-4 flex flex-wrap items-center gap-3">
-              <time class="text-sm text-text-muted dark:text-text-muted-dark" datetime={post.data.date.toISOString()}>
-                {formatDate(post.data.date)}
-              </time>
-              {post.data.topics.map((topic) => <span class={topicClass}>#{topic}</span>)}
+    <main class="relative z-10 text-text-primary dark:text-text-primary-dark">
+      {hasToc && (
+        <aside class="toc-fixed fixed left-0 top-0 z-30 hidden h-screen xl:block" aria-label="文章目录">
+          <div class="flex h-full items-center">
+            <div class="flex items-start gap-2">
+              <button
+                type="button"
+                class="toc-toggle"
+                aria-expanded="true"
+                aria-controls="toc-body"
+                aria-label="展开或收起目录"
+              >
+                <svg class="toc-toggle__icon h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              <div id="toc-body" class="toc-body scrollbar-thin">
+                <div class="toc-body__inner">
+                  <TableOfContents headings={tocItems} />
+                </div>
+              </div>
             </div>
+          </div>
+        </aside>
+      )}
+
+      <div class="mx-auto w-full max-w-[64rem] px-4 py-10 sm:px-6 sm:py-16">
+        <div class="fixed right-4 top-4 z-40 sm:right-6 sm:top-6">
+          <ThemeToggle />
+        </div>
+
+        <div class="min-w-0 w-full">
+          <div class="mb-8">
+            <BackHome />
+          </div>
+
+          <header class="border-b border-border pb-10 dark:border-border-dark">
+            <h1 class="m-0 text-3xl font-bold leading-10 tracking-[-0.03em] sm:text-4xl">{post.data.title}</h1>
             {
               post.data.description && (
-                <p class="mt-5 text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
+                <p class="mt-6 text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
                   {post.data.description}
                 </p>
               )
             }
           </header>
 
-          <div class="article-content mt-8">
+          <div class="article-content mt-10">
             <Content />
           </div>
-          <BlogPostNav adjacent={adjacent} />
-        </article>
-      </div>
-    </main>
-    <details class="mobile-assist min-[821px]:hidden">
-      <summary class="mobile-assist__toggle" aria-label="打开辅助信息">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M12 5v14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
-        </svg>
-      </summary>
-      <div class="mobile-assist__panel scrollbar-thin">
-        <div class="grid gap-3">
-          <Sidebar />
         </div>
       </div>
-    </details>
+    </main>
+
+    <script>
+      // ClientRouter-safe TOC toggle: delegate the click and resolve the toggle
+      // from the live DOM at click time, so it keeps working after client-side
+      // navigation swaps in a fresh `.toc-fixed`. The guard binds the listener once.
+      (() => {
+        if (window.__tocToggle) return;
+        window.__tocToggle = true;
+
+        document.addEventListener("click", (event) => {
+          if (!(event.target instanceof Element)) return;
+          const toggle = event.target.closest(".toc-toggle");
+          if (!toggle) return;
+          const toc = toggle.closest(".toc-fixed");
+          if (!toc) return;
+
+          const collapsed = toc.classList.toggle("is-collapsed");
+          toggle.setAttribute("aria-expanded", String(!collapsed));
+        });
+      })();
+    </script>
   </body>
 </html>
 
 <style>
   .article-content {
     color: var(--color-text-primary);
-    font-size: 1rem;
-    line-height: 1.9;
+    font-size: 1.0625rem;
+    line-height: 2.0;
   }
 
   :global(.dark) .article-content {
@@ -115,15 +130,17 @@ const topicClass =
     margin: 2rem 0 0.75rem;
     line-height: 1.35;
     letter-spacing: -0.04em;
-    scroll-margin-top: 6rem;
+    scroll-margin-top: 2rem;
   }
 
   .article-content :global(h2) {
     font-size: 1.5rem;
+    font-weight: 700;
   }
 
   .article-content :global(h3) {
     font-size: 1.25rem;
+    font-weight: 700;
   }
 
   .article-content :global(:where(p, ul, ol, blockquote)) {
@@ -172,5 +189,69 @@ const topicClass =
     background: transparent;
     padding: 0;
     color: inherit;
+  }
+
+  .toc-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-border);
+    border-left: 0;
+    border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+    background: var(--color-background);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    box-shadow: 0 0.25rem 1rem rgb(15 23 42 / 0.08);
+    transition: color 0.2s ease;
+  }
+
+  :global(.dark) .toc-toggle {
+    border-color: var(--color-border-dark);
+    background: var(--color-background-dark);
+    color: var(--color-text-secondary-dark);
+  }
+
+  .toc-toggle:hover {
+    color: var(--color-accent);
+  }
+
+  .toc-toggle__icon {
+    transition: transform 0.25s ease;
+  }
+
+  .toc-fixed.is-collapsed .toc-toggle__icon {
+    transform: rotate(180deg);
+  }
+
+  .toc-body {
+    width: 13rem;
+    max-height: calc(100vh - 4rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition:
+      width 0.25s ease,
+      opacity 0.2s ease;
+  }
+
+  .toc-fixed.is-collapsed .toc-body {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .toc-body__inner {
+    width: 13rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-card);
+    box-shadow: 0 1rem 2.5rem rgb(15 23 42 / 0.12);
+  }
+
+  :global(.dark) .toc-body__inner {
+    border-color: var(--color-border-dark);
+    background: var(--color-card-dark);
   }
 </style>

@@ -1,9 +1,8 @@
 ---
-title: "构建LLM"
+title: "构建 LLM"
 date: 2025-12-01
 slug: "project-llm"
-description: "LLM 构建及预训练"
-topics: ["项目"]
+description: "LLM 构建及预训练，深入理解 Trasformer 的基本数学原理，以及现代大语言模型的理论基础和工程落地技术。"
 draft: false
 ---
 

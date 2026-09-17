@@ -1,6 +1,6 @@
 ---
 import SiteClientRouter from "./SiteClientRouter.astro";
-import siteIcon from "../../assets/site-icon.png";
+import siteIcon from "../../assets/icon.svg";
 import { absoluteUrl, pageTitle, site } from "../../lib/seo";
 
 interface Props {
@@ -27,7 +27,7 @@ const fullTitle = pageTitle(title);
 ---
 
 <meta charset="utf-8" />
-<link rel="icon" type="image/png" href={siteIcon.src} />
+<link rel="icon" type="image/svg+xml" href={siteIcon.src} />
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
 <link rel="canonical" href={canonicalUrl} />

@@ -1,0 +1,35 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+---
+
+<nav aria-label="文章目录" class="text-sm">
+  <p
+    class="mb-3 text-xs font-bold uppercase leading-none tracking-[0.12em] text-text-muted dark:text-text-muted-dark"
+  >
+    目录
+  </p>
+  <ul class="m-0 list-none space-y-0.5 p-0">
+    {headings.map((heading) => (
+      <li>
+        <a
+          class={`block rounded-card py-1 no-underline transition-colors duration-200 hover:text-accent ${
+            heading.depth === 3 ? "pl-4" : "font-medium"
+          } text-text-secondary dark:text-text-secondary-dark`}
+          href={`#${heading.slug}`}
+        >
+          {heading.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

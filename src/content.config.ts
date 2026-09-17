@@ -2,33 +2,18 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-const topicsSchema = z.preprocess((value) => {
-  if (Array.isArray(value)) {
-    return value.map((topic) => String(topic).trim()).filter(Boolean);
-  }
-
-  if (typeof value === "string") {
-    return value
-      .split(/[,，]/)
-      .map((topic) => topic.trim())
-      .filter(Boolean);
-  }
-
-  return [];
-}, z.array(z.string()));
-
 const blog = defineCollection({
   loader: glob({
     base: "./src/content/blog",
     pattern: "**/*.{md,mdx}",
-    generateId: ({ entry, data }) => data.slug ?? entry.replace(/\.(md|mdx)$/, ""),
+    generateId: ({ entry, data }) => String(data.slug ?? entry.replace(/\.(md|mdx)$/, "")),
   }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
     slug: z.string(),
     description: z.string().optional(),
-    topics: topicsSchema.default([]),
+    cover: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

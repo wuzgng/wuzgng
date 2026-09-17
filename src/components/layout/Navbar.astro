@@ -1,263 +1,148 @@
 ---
-import { getCollection } from "astro:content";
+import ThemeToggle from "./ThemeToggle.astro";
 
-import siteIcon from "../../assets/site-icon.png";
-import { sortPostsByDateDesc } from "../../lib/blog";
+const base = import.meta.env.BASE_URL;
 
 const navItems = [
-  { label: "About", href: `${import.meta.env.BASE_URL}about/` },
-  { label: "Technic", href: `${import.meta.env.BASE_URL}blog/tech/` },
-  { label: "Project", href: `${import.meta.env.BASE_URL}blog/moments/` },
+  { label: "Home", href: "#home" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Award", href: "#award" },
 ];
-
-const searchPosts = sortPostsByDateDesc(await getCollection("blog", ({ data }) => !data.draft)).map((post) => ({
-  title: post.data.title,
-  description: post.data.description ?? "",
-  topics: post.data.topics,
-  href: `${import.meta.env.BASE_URL}blog/${post.id}/`,
-}));
-
-const actionClass =
-  "relative flex h-10 w-10 touch-manipulation items-center justify-center rounded-card text-white/70 transition duration-200 hover:-translate-y-px hover:bg-white/10 hover:text-white";
 ---
 
-<header class="fixed inset-x-0 top-0 z-50 px-2 py-3 text-white sm:px-4 sm:py-4" data-navbar>
-  <nav
-    class="mx-auto grid min-h-14 w-full max-w-[var(--container-max-width)] grid-cols-[1fr_auto] items-center gap-2 rounded-[1.25rem] border border-white/12 bg-slate-950/28 p-2 shadow-[0_18px_48px_rgb(0_0_0_/_0.18)] backdrop-blur-2xl sm:gap-4 md:grid-cols-[1fr_auto_1fr]"
-    aria-label="Primary navigation"
-  >
-    <a class="flex items-center gap-2 pl-1 no-underline" href={import.meta.env.BASE_URL} aria-label="Ng首页">
-      <img class="h-8 w-8 rounded-full object-cover" src={siteIcon.src} alt="" width="32" height="32" />
-      <span class="text-base font-semibold tracking-[-0.03em]">Ng</span>
-    </a>
-
-    <div class="hidden items-center gap-1 md:flex" aria-label="Main links">
-      {
-        navItems.map((item) => (
-          <a
-            class="relative rounded-card px-3 py-2 text-sm font-medium text-white/74 no-underline transition duration-200 after:absolute after:inset-x-3 after:bottom-1 after:h-px after:scale-x-75 after:bg-current after:opacity-0 after:transition after:duration-200 hover:-translate-y-px hover:bg-white/9 hover:text-white hover:after:scale-x-100 hover:after:opacity-32"
-            href={item.href}
-          >
-            {item.label}
-          </a>
-        ))
-      }
-    </div>
-
-    <div class="flex justify-end gap-1">
-      <div class="relative" data-search-root>
-        <button class={actionClass} type="button" aria-label="搜索" data-search-toggle>
-          <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.8"
-            />
-          </svg>
-        </button>
-
-        <div
-          class="pointer-events-none fixed left-2 right-2 top-20 hidden w-auto origin-top-right translate-y-1 opacity-0 transition duration-200 data-[open=true]:pointer-events-auto data-[open=true]:grid data-[open=true]:translate-y-0 data-[open=true]:opacity-100 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%_+_0.75rem)] sm:w-[min(22rem,calc(100vw_-_2rem))]"
-          data-search-panel
-        >
-          <div class="overflow-hidden rounded-[1.15rem] border border-white/45 bg-white/88 text-slate-950 shadow-[0_18px_48px_rgb(15_23_42_/_0.22)] backdrop-blur-2xl dark:border-white/12 dark:bg-slate-950/88 dark:text-white">
-            <label class="sr-only" for="site-search-input">搜索文章</label>
-            <div class="flex items-center gap-2 border-b border-slate-950/8 bg-white/42 px-3 py-2 dark:border-white/10 dark:bg-white/6">
-              <svg class="h-4 w-4 shrink-0 text-slate-500 dark:text-white/55" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.8"
-                />
-              </svg>
-              <input
-                id="site-search-input"
-                class="h-10 min-w-0 flex-1 border-0 bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500 dark:text-white dark:placeholder:text-white/45"
-                type="search"
-                placeholder="搜索标题、摘要或标签..."
-                autocomplete="off"
-                data-search-input
-              />
-            </div>
-            <div class="grid max-h-[min(24rem,calc(100vh_-_8rem))] gap-1 overflow-y-auto p-2 scrollbar-thin" data-search-results>
-              <p class="m-0 px-3 py-3 text-sm text-slate-500 dark:text-white/58">输入关键词开始搜索。</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <button class={actionClass} type="button" aria-label="切换暗黑模式" data-theme-toggle>
-        <svg class="h-4 w-4 dark:hidden" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M12 4V2m0 20v-2m8-8h2M2 12h2m13.66-5.66 1.41-1.41M4.93 19.07l1.41-1.41m0-11.32L4.93 4.93m14.14 14.14-1.41-1.41M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.7"
-          />
-        </svg>
-        <svg class="hidden h-4 w-4 dark:block" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M20.3 14.4A7.8 7.8 0 0 1 9.6 3.7 8.8 8.8 0 1 0 20.3 14.4Z"
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.7"
-          />
-        </svg>
-      </button>
-
-      <a class={actionClass} href="https://github.com/wuzgng" target="_blank" rel="noreferrer" aria-label="GitHub">
-        <svg class="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M12 2C6.48 2 2 6.58 2 12.24c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.5v-1.9c-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.85.09-.66.35-1.12.64-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.92c.85 0 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.06.36.32.68.95.68 1.92v2.8c0 .28.18.6.69.5A10.17 10.17 0 0 0 22 12.24C22 6.58 17.52 2 12 2Z"
-            fill="currentColor"
-          />
-        </svg>
-      </a>
-
-      <button
-        class={`${actionClass} md:hidden`}
-        type="button"
-        aria-label="打开导航菜单"
-        aria-controls="mobile-menu"
-        aria-expanded="false"
-        data-mobile-menu-toggle
+<header class="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-md dark:border-border-dark dark:bg-background-dark/70">
+  <div class="flex items-center justify-between gap-4 px-5 py-5 sm:px-8">
+    <div class="flex items-baseline gap-6 sm:gap-9">
+      <a
+        class="text-2xl font-bold tracking-[-0.02em] text-text-primary no-underline transition-colors duration-200 hover:text-accent sm:text-3xl dark:text-text-primary-dark dark:hover:text-accent"
+        href={base}
       >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M4 7h16M4 12h16M4 17h16"
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-width="1.8"
-          />
-        </svg>
-      </button>
+        ZG's Homepage
+      </a>
+      <nav class="relative hidden items-center gap-5 sm:flex sm:gap-7" aria-label="主导航">
+        {navItems.map((item) => (
+          <a class="nav-link text-base no-underline" href={item.href}>{item.label}</a>
+        ))}
+        <span class="nav-indicator" aria-hidden="true"></span>
+      </nav>
     </div>
 
-    <div
-      id="mobile-menu"
-      class="col-span-2 hidden origin-top translate-y-1 opacity-0 transition duration-200 data-[open=true]:grid data-[open=true]:translate-y-0 data-[open=true]:opacity-100 md:hidden"
-      data-mobile-menu
-    >
-      <div class="grid gap-1 border-t border-white/10 pt-2">
-        {
-          navItems.map((item) => (
-            <a
-              class="rounded-card px-3 py-3 text-sm font-semibold text-white/78 no-underline transition duration-200 hover:bg-white/10 hover:text-white"
-              href={item.href}
-              data-mobile-menu-link
-            >
-              {item.label}
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </nav>
+    <ThemeToggle />
+  </div>
 </header>
 
-<script define:vars={{ searchPosts }}>
-  const setMobileMenuOpen = (isOpen) => {
-    document.querySelector("[data-mobile-menu]")?.setAttribute("data-open", String(isOpen));
-    document.querySelector("[data-mobile-menu-toggle]")?.setAttribute("aria-expanded", String(isOpen));
-  };
+<style>
+  .nav-link {
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    transition: color 0.25s ease;
+  }
 
-  const setSearchPanelOpen = (isOpen) => {
-    document.querySelector("[data-search-panel]")?.setAttribute("data-open", String(isOpen));
-  };
+  :global(.dark) .nav-link {
+    color: var(--color-text-secondary-dark);
+  }
 
-  const escapeHtml = (value) =>
-    value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
+  .nav-link:hover {
+    color: var(--color-accent);
+  }
 
-  const renderSearchResults = (query) => {
-    const searchResults = document.querySelector("[data-search-results]");
-    if (!searchResults) return;
+  .nav-link.is-active {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
 
-    const keyword = query.trim().toLowerCase();
+  .nav-indicator {
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    height: 2px;
+    width: 0;
+    border-radius: 999px;
+    background: var(--color-accent);
+    transition:
+      left 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-    if (!keyword) {
-      searchResults.innerHTML = '<p class="m-0 px-3 py-3 text-sm text-slate-500 dark:text-white/58">输入关键词开始搜索。</p>';
+</style>
+
+<script>
+  // ClientRouter-safe scroll-spy: query the DOM fresh on every run so it keeps
+  // working after navigating away from and back to the homepage. The guard
+  // ensures listeners are only bound once even if this script re-runs.
+  (() => {
+    if (window.__navScrollSpy) {
       return;
     }
+    window.__navScrollSpy = true;
 
-    const results = searchPosts
-      .filter((post) => {
-        const haystack = [post.title, post.description, ...post.topics].join(" ").toLowerCase();
-        return haystack.includes(keyword);
-      })
-      .slice(0, 8);
+    const offset = 120;
 
-    if (results.length === 0) {
-      searchResults.innerHTML = '<p class="m-0 px-3 py-3 text-sm text-slate-500 dark:text-white/58">没有找到相关文章。</p>';
-      return;
-    }
+    const read = () => {
+      const links = Array.from(document.querySelectorAll(".nav-link"));
+      const indicator = document.querySelector(".nav-indicator");
+      const sections = links
+        .map((link) => document.querySelector(link.getAttribute("href") || ""))
+        .filter(Boolean);
+      return { links, indicator, sections };
+    };
 
-    searchResults.innerHTML = results
-      .map(
-        (post) => `
-          <a class="grid gap-1 rounded-card px-3 py-2 text-slate-800 no-underline transition duration-200 hover:bg-slate-950/6 hover:text-slate-950 dark:text-white/82 dark:hover:bg-white/10 dark:hover:text-white" href="${post.href}">
-            <span class="text-sm font-semibold leading-6">${escapeHtml(post.title)}</span>
-            <span class="line-clamp-2 text-xs leading-5 text-slate-500 dark:text-white/55">${escapeHtml(post.description || post.topics.map((topic) => `#${topic}`).join(" "))}</span>
-          </a>
-        `,
-      )
-      .join("");
-  };
-
-  document.addEventListener("click", (event) => {
-    if (event.target instanceof Element && event.target.closest("[data-search-toggle]")) {
-      const isOpen = document.querySelector("[data-search-panel]")?.getAttribute("data-open") === "true";
-      setSearchPanelOpen(!isOpen);
-      setMobileMenuOpen(false);
-
-      if (!isOpen) {
-        requestAnimationFrame(() => document.querySelector("[data-search-input]")?.focus());
+    const update = () => {
+      const { links, indicator, sections } = read();
+      if (!links.length || !indicator) {
+        return;
       }
-      return;
-    }
 
-    if (event.target instanceof Element && event.target.closest("[data-mobile-menu-toggle]")) {
-      const isOpen = document.querySelector("[data-mobile-menu]")?.getAttribute("data-open") === "true";
-      setMobileMenuOpen(!isOpen);
-      setSearchPanelOpen(false);
-      return;
-    }
+      let currentId = sections.length ? sections[0].id : "";
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= offset) {
+          currentId = section.id;
+        }
+      }
 
-    if (event.target instanceof Element && event.target.closest("[data-mobile-menu-link]")) {
-      setMobileMenuOpen(false);
-    }
-  });
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        currentId = sections[sections.length - 1].id;
+      }
 
-  document.addEventListener("input", (event) => {
-    if (event.target instanceof Element && event.target.closest("[data-search-input]")) {
-      renderSearchResults(event.target.value);
-    }
-  });
+      let activeLink = null;
+      for (const link of links) {
+        const isActive = link.getAttribute("href") === `#${currentId}`;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) {
+          activeLink = link;
+        }
+      }
 
-  document.addEventListener("pointerdown", (event) => {
-    if (!document.querySelector("[data-search-root]")?.contains(event.target)) {
-      setSearchPanelOpen(false);
-    }
+      if (activeLink) {
+        indicator.style.left = `${activeLink.offsetLeft}px`;
+        indicator.style.width = `${activeLink.offsetWidth}px`;
+      }
+    };
 
-    if (!document.querySelector("[data-navbar]")?.contains(event.target)) {
-      setMobileMenuOpen(false);
-    }
-  });
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      setSearchPanelOpen(false);
-      setMobileMenuOpen(false);
-    }
-  });
+    document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+      const link = event.target.closest(".nav-link");
+      if (!link) {
+        return;
+      }
+      const { links, indicator } = read();
+      if (!indicator) {
+        return;
+      }
+      for (const item of links) {
+        item.classList.toggle("is-active", item === link);
+      }
+      indicator.style.left = `${link.offsetLeft}px`;
+      indicator.style.width = `${link.offsetWidth}px`;
+    });
+
+    document.addEventListener("astro:page-load", update);
+    update();
+  })();
 </script>

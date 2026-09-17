@@ -1,16 +1,16 @@
 ---
-import "../styles/global.css";
+import { getCollection } from "astro:content";
 
-import Navbar from "../components/layout/Navbar.astro";
-import SiteHead from "../components/layout/SiteHead.astro";
-import { site } from "../lib/seo";
+import BlogListLayout from "../components/blog/BlogListLayout.astro";
+import { sortPostsByDateDesc } from "../lib/blog";
+
+const posts = sortPostsByDateDesc(
+  await getCollection("blog", ({ data }) => !data.draft),
+);
 ---
 
-<html lang="zh-CN">
-  <head>
-    <SiteHead title="Ng" description={site.defaultDescription} />
-  </head>
-  <body class="min-h-screen">
-    <Navbar />
-  </body>
-</html>
+<BlogListLayout
+  posts={posts}
+  title="Homepage"
+  description="吴正光的个人主页"
+/>

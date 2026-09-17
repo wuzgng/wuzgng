@@ -1,7 +1,7 @@
 <div class="resume">
   <main class="resume-page">
     <header>
-      <h1>吴炯林</h1>
+      <h1>吴正光</h1>
       <div class="resume-contact">
         <div>GitHub: https://github.com/wuzgng</div>
         <div>Email: wuzhguang@163.com</div>
@@ -149,7 +149,7 @@
     background: #ffffff;
     border: 1px solid var(--resume-line);
     border-radius: 1rem;
-    box-shadow: 0 1.25rem 3.25rem rgb(15 23 42 / 0.08);
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.06);
   }
 
   .resume header {
@@ -348,6 +348,23 @@
     margin-bottom: 0.18rem;
   }
 
+  /* 暗色模式 */
+  :global(.dark) .resume {
+    --resume-ink: rgb(245 247 251);
+    --resume-muted: rgb(230 235 245 / 0.78);
+    --resume-subtle: rgb(230 235 245 / 0.6);
+    --resume-line: rgb(226 232 240 / 0.16);
+    --resume-soft: rgb(255 255 255 / 0.06);
+  }
+
+  :global(.dark) .resume-page {
+    background: #0f1422;
+  }
+
+  :global(.dark) .resume-project-head::before {
+    border-color: #0f1422;
+  }
+
   @media (max-width: 720px) {
     .resume {
       margin-inline: -0.25rem;
@@ -357,7 +374,7 @@
     .resume-page {
       padding: 1.15rem 0.95rem;
       border-radius: 0.85rem;
-      box-shadow: 0 1rem 2rem rgb(15 23 42 / 0.07);
+      box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
     }
 
     .resume header {

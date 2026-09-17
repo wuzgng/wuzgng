@@ -1,9 +1,8 @@
 ---
-title: "pi0论文"
-date: 2026-07-01
-slug: "papper-pi0"
-description: "vla-pi0"
-topics: ["技术"]
+title: "pi 0 论文"
+date: 2026-07
+slug: "paper-pi0"
+description: "vla-pi0论文阅读与思考，重点理解其中的 flow match 动作生成的思想。"
 draft: false
 ---
 

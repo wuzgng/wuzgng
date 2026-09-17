@@ -2,30 +2,36 @@
 import type { BlogPost } from "../../lib/blog";
 
 import "../../styles/global.css";
+import photo from "../../assets/self.webp";
+import csgLogo from "../../assets/csg.svg";
+import buaaLogo from "../../assets/buaa.svg";
+import whutLogo from "../../assets/whut.svg";
 
 import Navbar from "../layout/Navbar.astro";
-import Sidebar from "../layout/Sidebar.astro";
 import SiteHead from "../layout/SiteHead.astro";
 
 interface Props {
   posts: BlogPost[];
   title: string;
-  eyebrow: string;
   description: string;
-  pageTitle?: string;
 }
 
-const { posts, title, eyebrow, description, pageTitle = `${title} | Ng` } = Astro.props;
+const { posts, title, description } = Astro.props;
 
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
+const sectionTitleClass =
+  "text-3xl font-bold leading-10 tracking-[-0.03em] sm:text-4xl";
 
-const topicClass =
-  "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
+const experiences = [
+  { org: "中国南方电网", role: "软件开发工程师", period: "2025 – 2026", city: "深圳", logo: csgLogo },
+  { org: "北京航空航天大学", role: "信息与通信工程 · 学术型硕士", period: "2022 – 2025", city: "北京", logo: buaaLogo },
+  { org: "武汉理工大学", role: "通信工程 · 工学学士", period: "2018 – 2022", city: "武汉", logo: whutLogo },
+];
+
+const awards = [
+  { title: "APMCM 亚太地区大学生数学建模竞赛 — 量子计算赛道二等奖"},
+  { title: "全国大学生数学竞赛二等奖" },
+  { title: "武汉理工大学优秀毕业生" },
+];
 ---
 
 <html lang="zh-CN">
@@ -34,75 +40,227 @@ const topicClass =
   </head>
   <body class="min-h-screen">
     <Navbar />
-    <main
-      class="site-grid site-grid--page relative z-10 text-text-primary dark:text-text-primary-dark"
-    >
-      <div class="hidden min-w-0 min-[821px]:block min-[821px]:sticky min-[821px]:top-20">
-        <Sidebar />
-      </div>
-      <div class="min-w-0">
-        <article class="rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark sm:p-8">
-          <header class="border-b border-border pb-6 dark:border-border-dark">
-            <p class="m-0 text-xs font-bold uppercase leading-none tracking-[0.16em] text-text-muted dark:text-text-muted-dark">
-              {eyebrow}
-            </p>
-            <h1 class="mt-5 text-3xl font-bold leading-tight tracking-[-0.06em] sm:text-5xl">{title}</h1>
-            <p class="mt-4 max-w-2xl text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
-              {description.split("\n").map((line, i) => (
-                i > 0 ? <><br />{line}</> : <>{line}</>
-              ))}
-            </p>
-          </header>
+    <main class="relative z-10 text-text-primary dark:text-text-primary-dark">
+      <div class="mx-auto w-full max-w-[64rem] px-4 sm:px-6">
+        <section id="home" class="scroll-mt-24 pt-10 pb-10 sm:pt-14 sm:pb-12">
+          <h2 class={sectionTitleClass}>Biography</h2>
+          <div class="mt-10 flex flex-col items-start gap-8 sm:mt-12 sm:flex-row sm:gap-12">
+            <img
+              class="h-[140px] w-[140px] shrink-0 rounded-lg object-cover"
+              src={photo.src}
+              alt="个人照片"
+              width="140"
+              height="140"
+            />
+            <div class="min-w-0 flex-1">
+              <p class="home-intro">我硕士毕业于北京航空航天大学信息与通信工程专业，本科毕业于武汉理工大学通信工程专业。我的研究与技术兴趣主要集中在信号处理、深度学习、大语言模型和机器人控制等方向。目前关注如何将机器学习方法应用于感知、决策与控制问题，并持续探索人工智能模型与真实物理系统之间的结合。</p>
+              <a
+                class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-accent no-underline transition-opacity duration-200 hover:opacity-75"
+                href={`${import.meta.env.BASE_URL}about/`}
+              >
+                个人简历
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </section>
 
-          {
-            posts.length > 0 ? (
-              <div class="mt-8 grid">
-                {posts.map((post, index) => (
-                  <article class={`${index > 0 ? "mt-8 border-t border-border pt-8 dark:border-border-dark" : ""} grid gap-3`}>
-                    <h2 class="m-0 text-xl font-bold leading-8 tracking-[-0.04em]">
-                      <a class="no-underline transition-colors duration-200 hover:text-accent" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
-                        {post.data.title}
+        <section id="experience" class="scroll-mt-24 pt-6 pb-10 sm:pt-8 sm:pb-12">
+          <h2 class={sectionTitleClass}>Experience</h2>
+          <div class="mt-6">
+            {experiences.map((entry) => (
+              <article class="exp-item">
+                <div class="exp-media">
+                  <img
+                    class="exp-logo"
+                    src={entry.logo.src}
+                    alt={`${entry.org} logo`}
+                    width="48"
+                    height="48"
+                  />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <h3 class="entry-text m-0">{entry.org}</h3>
+                    <time class="exp-time">{entry.period} · {entry.city}</time>
+                  </div>
+                  <p class="exp-role">{entry.role}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="projects" class="scroll-mt-24 pt-6 pb-10 sm:pt-8 sm:pb-12">
+          <h2 class={sectionTitleClass}>Projects</h2>
+          <div class="mt-6">
+            {
+              posts.length > 0 ? (
+                <div>
+                  {posts.map((post) => (
+                    <article class="grid gap-7 py-4 md:grid-cols-[13.6rem_minmax(0,1fr)] md:gap-12">
+                      <a
+                        class="block overflow-hidden rounded-xl"
+                        href={`${import.meta.env.BASE_URL}blog/${post.id}/`}
+                        aria-hidden="true"
+                        tabindex="-1"
+                      >
+                        {post.data.cover ? (
+                          <img
+                            class="aspect-video w-full object-cover"
+                            src={`${import.meta.env.BASE_URL}${post.data.cover}`}
+                            alt=""
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div class="flex aspect-video w-full items-center justify-center rounded-xl bg-primary/6 text-sm text-text-muted dark:bg-white/6 dark:text-text-muted-dark">
+                            暂无配图
+                          </div>
+                        )}
                       </a>
-                    </h2>
-                    <p class="m-0 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
-                      {post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。"}
-                    </p>
-                    {post.data.topics.length > 0 && (
-                      <div class="flex flex-wrap gap-2">
-                        {post.data.topics.map((topic) => (
-                          <span class={topicClass}>#{topic}</span>
-                        ))}
+
+                      <div class="grid content-start gap-3">
+                        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                          <h3 class="project-title m-0 font-bold">
+                            <a class="no-underline transition-colors duration-200 hover:text-accent" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
+                              {post.data.title}
+                            </a>
+                          </h3>
+                        </div>
+                        <p class="m-0 text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
+                          {post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。"}
+                        </p>
                       </div>
-                    )}
-                    <time
-                      class="text-xs leading-6 text-text-muted dark:text-text-muted-dark"
-                      datetime={post.data.date.toISOString()}
-                    >
-                      {formatDate(post.data.date)}
-                    </time>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <p class="mt-8 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
-                当前分类下还没有文章。
-              </p>
-            )
-          }
-        </article>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p class="text-lg leading-8 text-text-secondary dark:text-text-secondary-dark">
+                  当前分类下还没有文章。
+                </p>
+              )
+            }
+          </div>
+        </section>
+
+        <section id="award" class="scroll-mt-24 pt-6 pb-10 sm:pt-8 sm:pb-12">
+          <h2 class={sectionTitleClass}>Award</h2>
+          <ul class="award-list mt-6 list-none p-0">
+            {awards.map((award) => (
+              <li class="flex gap-5">
+                <span class="mt-3.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true"></span>
+                <div class="min-w-0 flex-1">
+                  <h3 class="entry-text m-0">{award.title}</h3>
+                  {award.note && (
+                    <p class="entry-text m-0 mt-1 text-text-secondary dark:text-text-secondary-dark">{award.note}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
     </main>
-    <details class="mobile-assist min-[821px]:hidden">
-      <summary class="mobile-assist__toggle" aria-label="打开辅助信息">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M12 5v14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
-        </svg>
-      </summary>
-      <div class="mobile-assist__panel scrollbar-thin">
-        <div class="grid gap-3">
-          <Sidebar />
-        </div>
-      </div>
-    </details>
   </body>
 </html>
+
+<style>
+  .home-intro {
+    margin: 0;
+    color: #1a1a1a;
+    font-size: 1.0625rem;
+    line-height: 1.9;
+    text-align: justify;
+  }
+
+  .entry-text {
+    font-size: 1.0625rem;
+    line-height: 1.9;
+  }
+
+  .project-title {
+    font-size: 1.1875rem;
+    line-height: 1.9;
+  }
+
+  .exp-item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .exp-item:not(:last-child) {
+    padding-bottom: 1.5rem;
+  }
+
+  .exp-item::before {
+    content: "";
+    position: absolute;
+    left: -4px;
+    top: 0.7rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border: 2px solid var(--color-background);
+    border-radius: 999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 1px rgb(63 111 174 / 0.4);
+    z-index: 1;
+  }
+
+  .exp-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.4rem;
+    bottom: 0;
+    width: 2px;
+    border-radius: 999px;
+    background: rgb(63 111 174 / 0.32);
+  }
+
+  .exp-media {
+    width: 64px;
+    flex-shrink: 0;
+    padding-left: 16px;
+  }
+
+  .exp-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  @media (min-width: 640px) {
+    .exp-item {
+      margin-left: calc(140px + 3rem);
+    }
+
+    .award-list {
+      /* 让文字左对齐个人介绍文字（140px 照片 + 3rem 间距），圆点（0.375rem）+ 圆点间距（1.25rem）置于左侧留白 */
+      margin-left: calc(140px + 3rem - 1.625rem);
+    }
+  }
+
+  .exp-role {
+    margin: 0.3rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .exp-time {
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  :global(.dark) .home-intro {
+    color: var(--color-text-primary-dark);
+  }
+
+  :global(.dark) .exp-item::before {
+    border-color: var(--color-background-dark);
+  }
+</style>
