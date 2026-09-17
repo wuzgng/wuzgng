@@ -2,15 +2,15 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-const tagsSchema = z.preprocess((value) => {
+const topicsSchema = z.preprocess((value) => {
   if (Array.isArray(value)) {
-    return value.map((tag) => String(tag).trim()).filter(Boolean);
+    return value.map((topic) => String(topic).trim()).filter(Boolean);
   }
 
   if (typeof value === "string") {
     return value
       .split(/[,，]/)
-      .map((tag) => tag.trim())
+      .map((topic) => topic.trim())
       .filter(Boolean);
   }
 
@@ -28,7 +28,7 @@ const blog = defineCollection({
     date: z.coerce.date(),
     slug: z.string(),
     description: z.string().optional(),
-    tags: tagsSchema.default([]),
+    topics: topicsSchema.default([]),
     draft: z.boolean().default(false),
   }),
 });

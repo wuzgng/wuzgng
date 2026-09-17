@@ -24,7 +24,7 @@ const formatDate = (date: Date) =>
     day: "2-digit",
   }).format(date);
 
-const tagClass =
+const topicClass =
   "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
 ---
 
@@ -59,29 +59,27 @@ const tagClass =
               <div class="mt-8 grid">
                 {posts.map((post, index) => (
                   <article class={`${index > 0 ? "mt-8 border-t border-border pt-8 dark:border-border-dark" : ""} grid gap-3`}>
-                    <div class="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-4">
-                      <h2 class="m-0 text-xl font-bold leading-8 tracking-[-0.04em]">
-                        <a class="no-underline transition-colors duration-200 hover:text-accent" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
-                          {post.data.title}
-                        </a>
-                      </h2>
-                      <time
-                        class="shrink-0 text-xs leading-6 text-text-muted dark:text-text-muted-dark"
-                        datetime={post.data.date.toISOString()}
-                      >
-                        {formatDate(post.data.date)}
-                      </time>
-                    </div>
+                    <h2 class="m-0 text-xl font-bold leading-8 tracking-[-0.04em]">
+                      <a class="no-underline transition-colors duration-200 hover:text-accent" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
+                        {post.data.title}
+                      </a>
+                    </h2>
                     <p class="m-0 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
                       {post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。"}
                     </p>
-                    {post.data.tags.length > 0 && (
+                    {post.data.topics.length > 0 && (
                       <div class="flex flex-wrap gap-2">
-                        {post.data.tags.map((tag) => (
-                          <span class={tagClass}>#{tag}</span>
+                        {post.data.topics.map((topic) => (
+                          <span class={topicClass}>#{topic}</span>
                         ))}
                       </div>
                     )}
+                    <time
+                      class="text-xs leading-6 text-text-muted dark:text-text-muted-dark"
+                      datetime={post.data.date.toISOString()}
+                    >
+                      {formatDate(post.data.date)}
+                    </time>
                   </article>
                 ))}
               </div>

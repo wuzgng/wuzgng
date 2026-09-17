@@ -5,7 +5,7 @@ export type BlogPost = CollectionEntry<"blog">;
 export const sortPostsByDateDesc = (posts: BlogPost[]) =>
   [...posts].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-export const hasTag = (post: BlogPost, tag: string) => post.data.tags.includes(tag);
+export const hasTopic = (post: BlogPost, topic: string) => post.data.topics.includes(topic);
 
 export const getPostHref = (post: BlogPost) => `${import.meta.env.BASE_URL}blog/${post.id}/`;
 

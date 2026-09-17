@@ -32,7 +32,7 @@ const formatDate = (date: Date) =>
     day: "2-digit",
   }).format(date);
 
-const tagClass =
+const topicClass =
   "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
 ---
 
@@ -67,7 +67,7 @@ const tagClass =
               <time class="text-sm text-text-muted dark:text-text-muted-dark" datetime={post.data.date.toISOString()}>
                 {formatDate(post.data.date)}
               </time>
-              {post.data.tags.map((tag) => <span class={tagClass}>#{tag}</span>)}
+              {post.data.topics.map((topic) => <span class={topicClass}>#{topic}</span>)}
             </div>
             {
               post.data.description && (

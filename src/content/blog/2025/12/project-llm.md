@@ -3,7 +3,7 @@ title: "构建LLM"
 date: 2025-12-01
 slug: "project-llm"
 description: "LLM 构建及预训练"
-tags: ["项目"]
+topics: ["项目"]
 draft: false
 ---
 

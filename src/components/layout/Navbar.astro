@@ -13,7 +13,7 @@ const navItems = [
 const searchPosts = sortPostsByDateDesc(await getCollection("blog", ({ data }) => !data.draft)).map((post) => ({
   title: post.data.title,
   description: post.data.description ?? "",
-  tags: post.data.tags,
+  topics: post.data.topics,
   href: `${import.meta.env.BASE_URL}blog/${post.id}/`,
 }));
 
@@ -23,7 +23,7 @@ const actionClass =
 
 <header class="fixed inset-x-0 top-0 z-50 px-2 py-3 text-white sm:px-4 sm:py-4" data-navbar>
   <nav
-    class="mx-auto grid min-h-14 w-full max-w-6xl grid-cols-[1fr_auto] items-center gap-2 rounded-[1.25rem] border border-white/12 bg-slate-950/28 p-2 shadow-[0_18px_48px_rgb(0_0_0_/_0.18)] backdrop-blur-2xl sm:gap-4 md:grid-cols-[1fr_auto_1fr]"
+    class="mx-auto grid min-h-14 w-full max-w-[var(--container-max-width)] grid-cols-[1fr_auto] items-center gap-2 rounded-[1.25rem] border border-white/12 bg-slate-950/28 p-2 shadow-[0_18px_48px_rgb(0_0_0_/_0.18)] backdrop-blur-2xl sm:gap-4 md:grid-cols-[1fr_auto_1fr]"
     aria-label="Primary navigation"
   >
     <a class="flex items-center gap-2 pl-1 no-underline" href={import.meta.env.BASE_URL} aria-label="Ng首页">
@@ -192,7 +192,7 @@ const actionClass =
 
     const results = searchPosts
       .filter((post) => {
-        const haystack = [post.title, post.description, ...post.tags].join(" ").toLowerCase();
+        const haystack = [post.title, post.description, ...post.topics].join(" ").toLowerCase();
         return haystack.includes(keyword);
       })
       .slice(0, 8);
@@ -207,7 +207,7 @@ const actionClass =
         (post) => `
           <a class="grid gap-1 rounded-card px-3 py-2 text-slate-800 no-underline transition duration-200 hover:bg-slate-950/6 hover:text-slate-950 dark:text-white/82 dark:hover:bg-white/10 dark:hover:text-white" href="${post.href}">
             <span class="text-sm font-semibold leading-6">${escapeHtml(post.title)}</span>
-            <span class="line-clamp-2 text-xs leading-5 text-slate-500 dark:text-white/55">${escapeHtml(post.description || post.tags.map((tag) => `#${tag}`).join(" "))}</span>
+            <span class="line-clamp-2 text-xs leading-5 text-slate-500 dark:text-white/55">${escapeHtml(post.description || post.topics.map((topic) => `#${topic}`).join(" "))}</span>
           </a>
         `,
       )

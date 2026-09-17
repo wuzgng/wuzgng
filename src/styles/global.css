@@ -23,6 +23,10 @@
   --radius-pill: 999px;
 }
 
+:root {
+  --container-max-width: 72rem;
+}
+
 @layer base {
   * {
     box-sizing: border-box;
@@ -68,7 +72,7 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     align-items: start;
-    width: min(calc(100% - 2rem), 1600px);
+    width: min(calc(100% - 2rem), var(--container-max-width));
     margin-inline: auto;
     gap: 1rem;
   }
@@ -354,7 +358,7 @@
 @media (max-width: 640px) {
   @layer components {
     .site-grid {
-      width: min(calc(100% - 1rem), 1600px);
+      width: min(calc(100% - 1rem), var(--container-max-width));
       gap: 0.75rem;
     }
 

@@ -3,7 +3,7 @@ title: "pi0论文"
 date: 2026-07-01
 slug: "papper-pi0"
 description: "vla-pi0"
-tags: ["技术"]
+topics: ["技术"]
 draft: false
 ---
 
