@@ -2,21 +2,13 @@
 title: "构建LLM"
 date: 2025-12-01
 slug: "project-llm"
-description: "llm-base"
+description: "LLM 构建及预训练"
 tags: ["项目"]
 draft: false
 ---
 
-论文链接：
- 
-https://arxiv.org/pdf/1706.03762
+> 项目地址：https://github.com/wuzgng/NLM.git
 
-https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf
-
-项目地址：
-
-
- 
 项目从 0 到 1 构建一个大语言模型，整个项目的理论和工程包括以下内容：
 1. Tokenizer：正则预分词、特殊 token 处理和BPE 编码规则、 BPE 分词器训练；
 2. 神经网络基础函数：SiLU 激活函数、Softmax、Linear 线性层、Embeding 词嵌入、RMSNorm 均方差层归一化、RoPE 旋转矩阵位置编码、Cross Entropy 交叉熵损失函数、Gradient Clipping 梯度剪裁；
