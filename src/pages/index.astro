@@ -1,21 +1,9 @@
 ---
 import "../styles/global.css";
 
-import Resume from "../components/about/Resume.astro";
 import Navbar from "../components/layout/Navbar.astro";
-import Sidebar from "../components/layout/Sidebar.astro";
 import SiteHead from "../components/layout/SiteHead.astro";
 import { site } from "../lib/seo";
-
-const pageTitle = "About me";
-const pageDate = new Date("2026-07-08");
-
-const formatDate = (date: Date) =>
-  new Intl.DateTimeFormat("zh-CN", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
 ---
 
 <html lang="zh-CN">
@@ -24,65 +12,5 @@ const formatDate = (date: Date) =>
   </head>
   <body class="min-h-screen">
     <Navbar />
-    <main
-      class="site-grid site-grid--page relative z-10 text-text-primary dark:text-text-primary-dark"
-    >
-      <div class="hidden min-w-0 min-[821px]:block min-[821px]:sticky min-[821px]:top-20">
-        <Sidebar />
-      </div>
-      <div class="min-w-0">
-        <article class="rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark sm:p-8">
-          <header class="border-b border-border pb-6 dark:border-border-dark">
-            <p class="m-0 text-xs font-bold uppercase leading-none tracking-[0.16em] text-text-muted dark:text-text-muted-dark">
-              About
-            </p>
-            <h1 class="mt-5 text-3xl font-bold leading-tight tracking-[-0.06em] sm:text-5xl">{pageTitle}</h1>
-            <time class="mt-4 block text-sm text-text-muted dark:text-text-muted-dark" datetime={pageDate.toISOString()}>
-              {formatDate(pageDate)}
-            </time>
-          </header>
-
-          <div class="article-content mt-8">
-            <section>
-            <h2 class="text-xl font-bold">联系方式</h2>
-            <ul class="mt-3 list-disc pl-5">
-             <li>邮箱：wuzhguang@163.com</li>
-             <li>QQ：309593453</li>
-            </ul>
-            </section>
-            <h2 class="text-xl font-bold">我的简历</h2>
-            <Resume />
-          </div>
-        </article>
-      </div>
-    </main>
-    <details class="mobile-assist min-[821px]:hidden">
-      <summary class="mobile-assist__toggle" aria-label="打开辅助信息">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M12 5v14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" />
-        </svg>
-      </summary>
-      <div class="mobile-assist__panel scrollbar-thin">
-        <div class="grid gap-3">
-          <Sidebar />
-        </div>
-      </div>
-    </details>
   </body>
 </html>
-
-<style>
-  .article-content {
-    color: var(--color-text-primary);
-    font-size: 1rem;
-    line-height: 1.9;
-  }
-
-  :global(.dark) .article-content {
-    color: var(--color-text-primary-dark);
-  }
-
-  .article-content :global(p) {
-    margin: 1rem 0;
-  }
-</style>
