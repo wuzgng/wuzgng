@@ -4,7 +4,6 @@ import type { BlogPost } from "../../lib/blog";
 import "../../styles/global.css";
 
 import Navbar from "../layout/Navbar.astro";
-import RightAside from "../layout/RightAside.astro";
 import Sidebar from "../layout/Sidebar.astro";
 import SiteHead from "../layout/SiteHead.astro";
 
@@ -25,8 +24,6 @@ const formatDate = (date: Date) =>
     day: "2-digit",
   }).format(date);
 
-const cardClass =
-  "rounded-card border border-border bg-card p-4 backdrop-blur-lg transition duration-200 hover:-translate-y-px hover:border-primary/30 hover:bg-white/82 dark:border-border-dark dark:bg-card-dark dark:hover:border-primary/30 dark:hover:bg-white/7 sm:p-5";
 const tagClass =
   "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
 ---
@@ -44,61 +41,57 @@ const tagClass =
         <Sidebar />
       </div>
       <div class="min-w-0">
-        <header class="mb-10">
-          <p class="m-0 text-xs font-bold uppercase leading-none tracking-[0.16em] text-text-muted dark:text-text-muted-dark">
-            {eyebrow}
-          </p>
-          <h1 class="mt-3 text-3xl font-bold leading-tight tracking-[-0.06em] sm:text-5xl">{title}</h1>
-          <p class="mt-4 max-w-2xl text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
-            {description.split("\n").map((line, i) => (
-              i > 0 ? <><br />{line}</> : <>{line}</>
-            ))}
-          </p>
-        </header>
-
-        {
-          posts.length > 0 ? (
-            <section class="grid gap-4" aria-label={`${title}列表`}>
-              {posts.map((post) => (
-                <article class={`${cardClass} grid gap-3`}>
-                  <div class="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-4">
-                    <h2 class="m-0 text-xl font-bold leading-8 tracking-[-0.04em]">
-                      <a class="no-underline transition-colors duration-200 hover:text-accent" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
-                        {post.data.title}
-                      </a>
-                    </h2>
-                    <time
-                      class="shrink-0 text-xs leading-6 text-text-muted dark:text-text-muted-dark"
-                      datetime={post.data.date.toISOString()}
-                    >
-                      {formatDate(post.data.date)}
-                    </time>
-                  </div>
-                  <p class="m-0 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
-                    {post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。"}
-                  </p>
-                  {post.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-2">
-                      {post.data.tags.map((tag) => (
-                        <span class={tagClass}>#{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                </article>
+        <article class="rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark sm:p-8">
+          <header class="border-b border-border pb-6 dark:border-border-dark">
+            <p class="m-0 text-xs font-bold uppercase leading-none tracking-[0.16em] text-text-muted dark:text-text-muted-dark">
+              {eyebrow}
+            </p>
+            <h1 class="mt-5 text-3xl font-bold leading-tight tracking-[-0.06em] sm:text-5xl">{title}</h1>
+            <p class="mt-4 max-w-2xl text-base leading-8 text-text-secondary dark:text-text-secondary-dark">
+              {description.split("\n").map((line, i) => (
+                i > 0 ? <><br />{line}</> : <>{line}</>
               ))}
-            </section>
-          ) : (
-            <section class={cardClass}>
-              <h2 class="m-0 text-xl font-bold tracking-[-0.04em]">暂无文章</h2>
-              <p class="mt-3 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
+            </p>
+          </header>
+
+          {
+            posts.length > 0 ? (
+              <div class="mt-8 grid">
+                {posts.map((post, index) => (
+                  <article class={`${index > 0 ? "mt-8 border-t border-border pt-8 dark:border-border-dark" : ""} grid gap-3`}>
+                    <div class="grid gap-2 sm:flex sm:items-start sm:justify-between sm:gap-4">
+                      <h2 class="m-0 text-xl font-bold leading-8 tracking-[-0.04em]">
+                        <a class="no-underline transition-colors duration-200 hover:text-accent" href={`${import.meta.env.BASE_URL}blog/${post.id}/`}>
+                          {post.data.title}
+                        </a>
+                      </h2>
+                      <time
+                        class="shrink-0 text-xs leading-6 text-text-muted dark:text-text-muted-dark"
+                        datetime={post.data.date.toISOString()}
+                      >
+                        {formatDate(post.data.date)}
+                      </time>
+                    </div>
+                    <p class="m-0 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
+                      {post.data.description ?? "这篇文章暂无摘要，点击标题阅读全文。"}
+                    </p>
+                    {post.data.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2">
+                        {post.data.tags.map((tag) => (
+                          <span class={tagClass}>#{tag}</span>
+                        ))}
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p class="mt-8 text-sm leading-7 text-text-secondary dark:text-text-secondary-dark">
                 当前分类下还没有文章。
               </p>
-            </section>
-          )
-        }
-      </div>
-      <div class="hidden min-w-0 min-[821px]:col-start-2 min-[821px]:block min-[1101px]:sticky min-[1101px]:top-20 min-[1101px]:col-auto">
-        <RightAside />
+            )
+          }
+        </article>
       </div>
     </main>
     <details class="mobile-assist min-[821px]:hidden">
@@ -110,7 +103,6 @@ const tagClass =
       <div class="mobile-assist__panel scrollbar-thin">
         <div class="grid gap-3">
           <Sidebar />
-          <RightAside />
         </div>
       </div>
     </details>

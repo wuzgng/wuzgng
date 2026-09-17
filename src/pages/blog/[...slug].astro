@@ -23,8 +23,7 @@ export async function getStaticPaths() {
 }
 
 const { post, adjacent } = Astro.props;
-const { Content, headings } = await render(post);
-const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const { Content } = await render(post);
 
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("zh-CN", {
@@ -35,10 +34,6 @@ const formatDate = (date: Date) =>
 
 const tagClass =
   "rounded-pill border border-primary/16 bg-primary/8 px-2 py-1 text-xs font-medium leading-tight text-text-secondary transition-colors duration-200 hover:border-accent/28 hover:bg-accent/9 hover:text-text-primary dark:border-primary/18 dark:bg-primary/10 dark:text-text-secondary-dark dark:hover:border-accent/30 dark:hover:bg-accent/12 dark:hover:text-text-primary-dark";
-const tocCardClass =
-  "rounded-card border border-border bg-card p-4 backdrop-blur-lg dark:border-border-dark dark:bg-card-dark";
-const tocTitleClass =
-  "mb-3 text-xs font-bold uppercase leading-none tracking-[0.12em] text-text-muted dark:text-text-muted-dark";
 ---
 
 <html lang="zh-CN">
@@ -89,35 +84,6 @@ const tocTitleClass =
           <BlogPostNav adjacent={adjacent} />
         </article>
       </div>
-      <div class="hidden min-w-0 min-[821px]:col-start-2 min-[821px]:block min-[1101px]:sticky min-[1101px]:top-20 min-[1101px]:col-auto">
-        <aside class="grid w-full content-start gap-4 text-text-primary dark:text-text-primary-dark" aria-label="文章辅助信息">
-          <section class={tocCardClass} aria-labelledby="article-toc-title">
-            <h2 id="article-toc-title" class={tocTitleClass}>文章目录</h2>
-            {
-              tocHeadings.length > 0 ? (
-                <nav aria-label="文章目录">
-                  <ol class="m-0 grid list-none gap-2 p-0">
-                    {tocHeadings.map((heading) => (
-                      <li class={heading.depth === 3 ? "pl-3" : ""}>
-                        <a
-                          class="block rounded-card px-2 py-1.5 text-sm leading-5 text-text-secondary no-underline transition duration-200 hover:bg-primary/10 hover:text-text-primary dark:text-text-secondary-dark dark:hover:bg-white/8 dark:hover:text-text-primary-dark"
-                          href={`#${heading.slug}`}
-                        >
-                          {heading.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
-                </nav>
-              ) : (
-                <p class="m-0 text-sm leading-6 text-text-secondary dark:text-text-secondary-dark">
-                  这篇文章暂无可跳转的小标题。
-                </p>
-              )
-            }
-          </section>
-        </aside>
-      </div>
     </main>
     <details class="mobile-assist min-[821px]:hidden">
       <summary class="mobile-assist__toggle" aria-label="打开辅助信息">
@@ -128,33 +94,6 @@ const tocTitleClass =
       <div class="mobile-assist__panel scrollbar-thin">
         <div class="grid gap-3">
           <Sidebar />
-          <aside class="grid w-full content-start gap-4 text-text-primary dark:text-text-primary-dark" aria-label="文章辅助信息">
-            <section class={tocCardClass} aria-labelledby="mobile-article-toc-title">
-              <h2 id="mobile-article-toc-title" class={tocTitleClass}>文章目录</h2>
-              {
-                tocHeadings.length > 0 ? (
-                  <nav aria-label="文章目录">
-                    <ol class="m-0 grid list-none gap-2 p-0">
-                      {tocHeadings.map((heading) => (
-                        <li class={heading.depth === 3 ? "pl-3" : ""}>
-                          <a
-                            class="block rounded-card px-2 py-2 text-sm leading-5 text-text-secondary no-underline transition duration-200 hover:bg-primary/10 hover:text-text-primary dark:text-text-secondary-dark dark:hover:bg-white/8 dark:hover:text-text-primary-dark"
-                            href={`#${heading.slug}`}
-                          >
-                            {heading.text}
-                          </a>
-                        </li>
-                      ))}
-                    </ol>
-                  </nav>
-                ) : (
-                  <p class="m-0 text-sm leading-6 text-text-secondary dark:text-text-secondary-dark">
-                    这篇文章暂无可跳转的小标题。
-                  </p>
-                )
-              }
-            </section>
-          </aside>
         </div>
       </div>
     </details>

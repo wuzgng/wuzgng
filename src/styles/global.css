@@ -376,10 +376,3 @@
   }
 }
 
-@media (min-width: 1101px) {
-  @layer components {
-    .site-grid {
-      grid-template-columns: minmax(0, 14rem) minmax(0, 1fr) minmax(0, 14rem);
-    }
-  }
-}
